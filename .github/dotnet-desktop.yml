@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: .NET Core Desktop
 
 on:
   push:
@@ -6,17 +6,23 @@ on:
       - main
 
 jobs:
-  build:
-    name: Dotnet Build
+  buil_and_test:
     runs-on: windows-latest
+    
     steps:
-      - name: Check Out Repository
-        uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+      - name: Get code from repo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 5.0
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 5.0.17
-      - name: Restore Dependencies
+          dotnet-version: 5.0
+
+      - name: Install dependencies
         run: dotnet restore
-      - name: Run Tests
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Test
         run: dotnet test --no-build
